@@ -1,20 +1,20 @@
 %{ 
   #include<stdio.h> 
   #include "y.tab.h" 
-  extern int yylval; 
   void yyerror(char *);
 %} 
+
+%option noyywrap
   
+DIGIT   [0-9]
+NUM     {DIGIT}+("."{DIGIT}+)?
+
 /* Rule Section */
 %% 
-[0-9]+               { yylval=atoi(yytext); return NUMBER; } 
-[-()+*/]             { return *yytext; }
-[\t] ; 
-[\n] return 0; 
-.                yyerror("Unknown character");
+{NUM}               { yylval=atoi(yytext); return NUMBER; } 
+[-()+*/;]            { return *yytext; }
+"evaluar"            { return EVALUAR; }
+[[:blank:]] ;
+.                     yyerror("Unknown character");
   
 %% 
-  
-int yywrap() { 
- return 1; 
-} 
